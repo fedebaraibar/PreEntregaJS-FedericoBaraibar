@@ -1,11 +1,45 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pre entrega</title>
+    <title>TechnoHouse</title>
+    <link rel="stylesheet" href="./estilos.css">
+    <link rel="shortcut icon" href="./multimedia/tarjeta-grafica.png" type="image/x-icon">
 </head>
+
 <body>
-    <script src="index.js"></script>
+    <h1>TechnoHouse</h1>
+    <h2>Catalogo de Productos</h2>
+
+    <div id="nombreUsuario"></div>
+
+    <div id="productos">
+        <h3>Perifericos</h3>
+        <ul id="productosList"></ul>
+        <div id="mostrarDescuentos"> !HOY ESTAMOS DE DESCUENTOS¡ </div>
+    </div>
+
+    <div id="carrito">
+        <h2>Carrito</h2>
+        <ul id="carritoList"></ul>
+        <div id="total"></div>
+        <button id="comprarBtn">Comprar</button>
+    </div>
+
+    <!-- Capa de superposición para el detalle de compra -->
+    <div id="detalleCompra" class="detalleCompra">
+        <div class="detalleCompra-content">
+            <span id="cerrarDetalleCompra" class="cerrarDetalleCompra">&times;</span>
+            <h2>COMPRA FINALIZADA</h2>
+            <p>El producto lo empaquetaremos y estara en la puerta de tu casa  </p>
+            <!-- Contenedor para mostrar los detalles de la compra -->
+            <div id="compraFinal"></div>
+        </div>
+    </div>
+
+    <script src="./index.js"></script>
 </body>
+
 </html>
