@@ -21,7 +21,7 @@ const productos = [{
     {
         name: "PLACA DE VIDEO RTX3060",
         price: 40000,
-        discount: 0
+        discount: 0.2
     },
     {
         name: "RAM DDR4 8GB",
