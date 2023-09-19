@@ -26,12 +26,12 @@ const productos = [{
     {
         name: "RAM DDR4 8GB",
         price: 6000,
-        discount: 0
+        discount: 0.1
     },
     {
         name: "MOUSE PAD RGB",
         price: 1000,
-        discount: 0
+        discount: 0.05
     },
 ];
 
