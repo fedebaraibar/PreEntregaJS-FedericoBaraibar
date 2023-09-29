@@ -1,176 +1,254 @@
-// Solicitar el nombre del usuario a través de un prompt
-const nombre = prompt("Por favor, introduce tu nombre:");
+document.addEventListener("DOMContentLoaded", function () {
+    const productContainer = document.querySelector(".product-container");
+    const cartIcon = document.querySelector(".icons img:last-child");
+    const cartSidebar = document.getElementById("cart-sidebar");
+    const cartItems = document.getElementById("cart-items");
+    const cartTotal = document.getElementById("cart-total");
+    const checkoutButton = document.getElementById("checkout-button");
+    let cartCount = 0;
+    let cartProducts = [];
 
-// Obtener el nombre de usuario
-const nombreUsuario = document.getElementById("nombreUsuario");
+    // Función para incrementar la cantidad
+    function incrementQuantity(element) {
+        const currentQuantity = parseInt(element.textContent);
+        element.textContent = currentQuantity + 1;
+    }
 
-// Mostrar el nombre del usuario 
-nombreUsuario.textContent = `Bienvenido, ${nombre}!`;
-
-// Definición de productos
-const productos = [{
-        name: "TECLADO MECANICO",
-        price: 8000,
-        discount: 0.1
-    },
-    {
-        name: "MONITOR FULL HD",
-        price: 10000,
-        discount: 0.1
-    },
-    {
-        name: "PLACA DE VIDEO RTX3060",
-        price: 40000,
-        discount: 0.2
-    },
-    {
-        name: "RAM DDR4 8GB",
-        price: 6000,
-        discount: 0.1
-    },
-    {
-        name: "MOUSE PAD RGB",
-        price: 1000,
-        discount: 0.05
-    },
-];
-
-// referencias DOM
-const productosList = document.getElementById("productosList");
-const carritoList = document.getElementById("carritoList");
-const totalElement = document.getElementById("total");
-const mostrarDescuentosBtn = document.getElementById("mostrarDescuentos");
-const comprarBtn = document.getElementById("comprarBtn");
-
-// Objeto carrito de compras
-const shoppingCart = {
-    items: [],
-
-    addItem: function (product) {
-        this.items.push(product);
-        this.render();
-        this.saveToLocalStorage();
-        this.showNotification(`Agregado: ${product.name}`);
-    },
-
-    removeItem: function (index) {
-        this.items.splice(index, 1);
-        this.render();
-        this.saveToLocalStorage();
-    },
-
-    calculateTotal: function () {
-        let total = 0;
-        for (const item of this.items) {
-            total += item.price * (1 - item.discount);
+    // Función para decrementar la cantidad
+    function decrementQuantity(element) {
+        const currentQuantity = parseInt(element.textContent);
+        if (currentQuantity >= 1) {
+            element.textContent = currentQuantity - 1;
         }
-        return total;
-    },
+    }
 
-    render: function () {
-        carritoList.innerHTML = "";
+    // Función para calcular el precio con descuento
+    function calcularPrecioConDescuento(precio) {
+        // Aplica un 15% de descuento
+        return precio * 0.85;
+    }
+
+    // Función para abrir el sidebar del carrito
+    function openCartSidebar() {
+        cartSidebar.classList.add("open");
+    }
+
+    // Función para cerrar el sidebar del carrito
+    function closeCartSidebar() {
+        cartSidebar.classList.remove("open");
+    }
+
+    // Función para limpiar las cantidades del producto
+    function cleanItemQuantity(element) {
+        element.textContent = 0
+    }
+
+    // Función para actualizar el precio total del carrito
+    function updateCartTotal() {
         let total = 0;
 
-        // Mostrar los productos en el carrito
-        for (let i = 0; i < this.items.length; i++) {
-            const item = this.items[i];
-            const carritoItem = document.createElement("li");
-            carritoItem.innerHTML = `
-            <div class="product-info">
-                <span>${item.name} - Precio: $${item.price.toFixed(2)}</span>
-                <span class="discount">${(item.discount * 100)}% descuento</span>
-            </div>
-            <button class="delete-button" onclick="shoppingCart.removeItem(${i})">✕</button>`;
-            carritoList.appendChild(carritoItem);
-            total += item.price * (1 - item.discount);
+        cartProducts.forEach(product => {
+            total += product.precio;
+        });
+
+        cartTotal.textContent = total.toFixed(2);
+    }
+
+    // Función para agregar un producto al carrito
+    function addToCart(product, quantity) {
+        const cartItem = document.createElement("li");
+
+        let precio = product.precio * quantity;
+
+        if (product.tieneDescuento) {
+            precio = calcularPrecioConDescuento(precio);
         }
 
-        // Actualizar el total de la compra cada vez que se agrega un producto
-        totalElement.textContent = `Total: $${total.toFixed(2)}`;
-    },
+        cartItem.innerHTML = `
+            <img src="${product.imagen}" alt="${product.nombre}">
+            <span>${product.nombre} (x${quantity})</span>
+            <span>$${precio.toFixed(2)}</span>
+            <button class="remove-button" data-id="${product.id}">
+                <img src="./multimedia/cerrar.png" alt="Eliminar">
+            </button>
+        `;
+        cartItems.appendChild(cartItem);
 
-    saveToLocalStorage: function () {
-        localStorage.setItem("cart", JSON.stringify(this.items));
-    },
+        // ACTUALIZAR CARRITO
+        cartCount += quantity;
 
-    loadFromLocalStorage: function () {
-        const cartData = localStorage.getItem("cart");
-        if (cartData) {
-            this.items = JSON.parse(cartData);
-            this.render();
+        cartProducts.push({
+            ...product,
+            precio,
+            cantidad: quantity
+        });
+
+        localStorage.setItem("cartProducts", JSON.stringify(cartProducts));
+
+        // ACTULIZAR PRECIO TOTAL
+        updateCartTotal();
+
+        // MOSTRAR TOASTIFY
+        Toastify({
+            text: "Añadido al carrito",
+            duration: 3000,
+            gravity: "bottom",
+            position: "right",
+            style: {
+                background: "rgb(46, 211, 46)", // Cambia el color de fondo a verde 
+                color: "#FAFAFA",
+            },
+        }).showToast();
+
+
+        const removeButtons = document.querySelectorAll(".remove-button");
+        removeButtons.forEach((button, index) => {
+            button.addEventListener("click", () => {
+                const productId = parseInt(button.getAttribute("data-id"));
+                removeFromCart(productId);
+            });
+        });
+    }
+
+    // FUNCION ELIMINAR PRODUCTO CARRITO
+    function removeFromCart(productId) {
+        const productIndex = cartProducts.findIndex(product => product.id === productId);
+
+        if (productIndex !== -1) {
+            const removedProduct = cartProducts[productIndex];
+
+            // Restar la cantidad del producto eliminado del contador del carrito
+            cartCount -= removedProduct.cantidad;
+
+            // Eliminar el producto del array de productos en el carrito
+            cartProducts.splice(productIndex, 1);
+
+            // Actualizar el almacenamiento en Local Storage
+            localStorage.setItem("cartProducts", JSON.stringify(cartProducts));
+
+            // Eliminar el elemento del carrito 
+            cartItems.removeChild(cartItems.children[productIndex]);
+
+            // Actualizar el precio total
+            updateCartTotal();
         }
-    },
+    }
 
-    showNotification: function (message) {
-        const notification = document.createElement("div");
-        notification.className = "notification";
-        notification.textContent = message;
-        document.body.appendChild(notification);
-        setTimeout(() => {
-            notification.remove();
-        }, 2000);
-    },
-};
+    // Cargar los productos del carrito desde Local Storage al cargar la página
+    const storedCart = localStorage.getItem("cartProducts");
+    if (storedCart) {
+        cartProducts = JSON.parse(storedCart);
 
-// Cargar carrito desde el local storage
-shoppingCart.loadFromLocalStorage();
+        // Actualizar el precio total al cargar desde Local Storage
+        updateCartTotal();
 
-// Evento para Comprar
-comprarBtn.addEventListener("click", () => {
-    const productosComprados = shoppingCart.items.map(item => {
-        let precioTexto = `${item.name} - Precio: $${item.price.toFixed(2)}`;
-        if (item.discount > 0) {
-            const precioConDescuento = item.price * (1 - item.discount);
-            precioTexto += ` (Descuento ${item.discount * 100}%): $${precioConDescuento.toFixed(2)}`;
+        cartProducts.forEach(product => {
+            addToCart(product, product.cantidad);
+        });
+    }
+
+    // Asignar evento al icono del carrito para abrir el sidebar
+    cartIcon.addEventListener("click", openCartSidebar);
+
+    // Asignar evento al botón de cruz para cerrar el sidebar
+    const closeCartButton = document.getElementById("close-cart-button");
+    closeCartButton.addEventListener("click", closeCartSidebar);
+
+    // Asignar evento al botón de finalizar compra para limpiar el carrito
+    checkoutButton.addEventListener("click", () => {
+        if (cartProducts.length > 0) {
+
+            // Mostrar SweetAlert de compra exitosa
+            Swal.fire({
+                position: 'center',
+                icon: 'success',
+                title: '¡La compra fue realizada!',
+                showConfirmButton: false,
+                timer: 2000
+            }).then(() => {
+                // Limpiar el carrito u otras acciones después de la compra
+                cartItems.innerHTML = "";
+                cartCount = 0;
+                cartTotal.textContent = "0.00";
+                cartProducts = [];
+                localStorage.removeItem("cartProducts");
+                closeCartSidebar();
+            });
+        } else {
+            // Mostrar SweetAlert de carrito vacío
+            Swal.fire({
+                position: 'center',
+                icon: 'warning',
+                title: 'No tiene ningun producto en el carrito',
+                showConfirmButton: false,
+                timer: 2000
+            });
         }
-        return precioTexto;
     });
 
-    const totalCompra = shoppingCart.calculateTotal().toFixed(2);
+    // Obtener los datos del archivo JSON utilizando fetch
+    fetch("Productos.json")
+        .then(response => response.json())
+        .then(data => {
+            // Recorrer los datos y generar la estructura HTML
+            data.forEach((product, index) => {
+                const productDiv = document.createElement("div");
+                productDiv.classList.add("product");
+                productDiv.innerHTML = `
+                    <button class="remove-button" data-id="${product.id}">
+                        <img src="./multimedia/cerrar.png" alt="Eliminar">
+                    </button>
+                    <img src="${product.imagen}" alt="${product.nombre}">
+                    <h2>${product.nombre}</h2>
+                    ${product.tieneDescuento
+                        ? `
+                        <span class="original-price discounted">$${product.precio.toFixed(2)}</span>
+                        <span class="discounted-price">$${product.precioDescuento.toFixed(2)}</span>
+                        `
+                        : `
+                        <span class="original-price">$${product.precio.toFixed(2)}</span>
+                        `
+                    }
+                    <div class="counter">
+                        <button class="decrement">-</button>
+                        <span class="quantity">0</span>
+                        <button class="increment">+</button>
+                    </div>
+                    <button class="buy-button">Comprar</button>
+                `;
+                productContainer.appendChild(productDiv);
 
-    // Construir los detalles de la compra en una cadena de texto
-    const detallesCompra = `<ul>
-            ${productosComprados.map(producto => `<li id="listadoProductosComprados">${producto}</li>`).join('')}
-        </ul>
-        <div id="totalCompra">Total de la compra: $${totalCompra}</div>
-        <div id="graciasPorCompra">Gracias por su compra, ${nombre}</div>
-    `;
+                // Agregar evento al botón de compra
+                const buyButton = productDiv.querySelector(".buy-button");
+                buyButton.addEventListener("click", () => {
+                    const currentQuantity = parseInt(productDiv.querySelector(".quantity").textContent);
+                    const clickedProduct = data[index]; // Usar la variable index en lugar de product.id
+                    const quantityElement = productDiv.querySelector(".quantity");
 
-    // Mostrar los detalles de la compra en el contenedor oculto
-    const compraFinal = document.getElementById("compraFinal");
-    compraFinal.innerHTML = detallesCompra;
+                    // Asegurarse de que al menos haya un producto en el carrito
+                    if (currentQuantity >= 1) {
+                        addToCart(clickedProduct, currentQuantity); // Usar la variable clickedProduct
+                        closeCartSidebar(); // Cerrar el sidebar después de agregar productos
+                        cleanItemQuantity(quantityElement); // Limpio las cantidades del producto comprado
+                    }
+                });
 
-    // Mostrar la capa de superposición
-    const detalleCompra = document.getElementById("detalleCompra");
-    detalleCompra.style.display = "block";
+                // Asignar eventos a los botones de incremento
+                const incrementButton = productDiv.querySelector(".increment");
+                incrementButton.addEventListener("click", () => {
+                    const quantityElement = productDiv.querySelector(".quantity");
+                    incrementQuantity(quantityElement); // Pasa el elemento quantity directamente
+                });
+
+                // Asignar eventos a los botones de decremento
+                const decrementButton = productDiv.querySelector(".decrement");
+                decrementButton.addEventListener("click", () => {
+                    const quantityElement = productDiv.querySelector(".quantity");
+                    decrementQuantity(quantityElement); // Pasa el elemento quantity directamente
+                });
+            });
+        })
+        .catch(error => console.error("Error al cargar los datos del archivo JSON:", error));
+
+    localStorage.clear();
 });
-
-// Evento para cerrar la capa de superposición
-const cerrarDetalleCompra = document.getElementById("cerrarDetalleCompra");
-cerrarDetalleCompra.addEventListener("click", () => {
-    const detalleCompra = document.getElementById("detalleCompra");
-    detalleCompra.style.display = "none";
-});
-
-
-// Función mostrarDescuentos
-mostrarDescuentosBtn.addEventListener("click", () => {
-    mostrarDescuentos();
-});
-
-// Función para mostrar productos
-function mostrarProductos() {
-    productosList.innerHTML = "";
-    for (let i = 0; i < productos.length; i++) {
-        const producto = productos[i];
-        const listItem = document.createElement("li");
-        listItem.innerHTML = `
-        <span>${producto.name} - Precio: $${producto.price.toFixed(2)}</span>
-        <span class="discount">${(producto.discount * 100)}% descuento</span>
-        <button onclick="shoppingCart.addItem(productos[${i}])">Agregar al carrito</button>`;
-        productosList.appendChild(listItem);
-    }
-}
-
-// Mostrar productos de compra al cargar la página
-mostrarProductos();

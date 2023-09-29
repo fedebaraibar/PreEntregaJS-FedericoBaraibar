@@ -1,45 +1,42 @@
-<!DOCTYPE html>
 <html lang="es">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/estilos.css">
     <title>TechnoHouse</title>
-    <link rel="stylesheet" href="./css/estilos.css">
-    <link rel="shortcut icon" href="./multimedia/tarjeta-grafica.png" type="image/x-icon">
+    <script src="./Productos.json"></script>
+    <script src="/javascript/index.js"></script>
 </head>
-
 <body>
-    <h1>TechnoHouse</h1>
-    <h2>Catalogo de Productos</h2>
+    <header>
+        <nav>
+            <h1>TechnoHouse</h1>
+            <div class="logo">
+                <img src="multimedia/tarjeta-grafica.png" alt="Logo de la tienda">
+            </div>
+            <div class="icons">
+                <img src="./multimedia/carrito-de-compras.png" alt="Icono de carrito">
+            </div>
+        </nav>
+    </header>
 
-    <div id="nombreUsuario"></div>
-
-    <div id="productos">
-        <h3>Perifericos</h3>
-        <ul id="productosList"></ul>
-        <div id="mostrarDescuentos"> !HOY ESTAMOS DE DESCUENTOS¡ </div>
-    </div>
-
-    <div id="carrito">
-        <h2>Carrito</h2>
-        <ul id="carritoList"></ul>
-        <div id="total"></div>
-        <button id="comprarBtn">Comprar</button>
-    </div>
-
-    <!-- Capa de superposición para el detalle de compra -->
-    <div id="detalleCompra" class="detalleCompra">
-        <div class="detalleCompra-content">
-            <span id="cerrarDetalleCompra" class="cerrarDetalleCompra">&times;</span>
-            <h2>COMPRA REALIZADA</h2>
-            <p>El producto sera empaquetado  y estara en la puerta de tu casa lo mas pronto posible  </p>
-            <!-- Contenedor para mostrar los detalles de la compra -->
-            <div id="compraFinal"></div>
+    <main>
+        
+        <section class="product-container">
+        </section>
+        <div id="cart-sidebar" class="cart-sidebar">
+            <button id="close-cart-button" class="close-cart-button"></button>
+            <h2>Carrito de Compras</h2>
+            <ul id="cart-items" class="cart-items">
+                <!-- productos del carrito -->
+            </ul>
+            <p>Total: $<span id="cart-total">0.00</span></p>
+            <button id="checkout-button" class="checkout-button">Finalizar Compra</button>
         </div>
-    </div>
+    </main>
 
-    <script src="./javascript/index.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    
 </body>
-
 </html>

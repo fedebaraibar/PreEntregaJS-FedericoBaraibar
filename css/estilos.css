@@ -1,176 +1,197 @@
 body {
-    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
-    margin: 30px;
-    padding: 0;
-    background-color:black;
-    
-  }
-  
-  h1 {
-    text-align: center;
-    color: rgb(22, 215, 22);
-    text-decoration: underline;
-  }
+  font-family:'Courier New', Courier, monospace;
+  margin: 0;
+  padding: 0;
+  background-color: black;
+}
 
-  h2{
-    color: rgb(22, 215, 22);
-    text-decoration: underline;
-  }
-  
-  ul {
-    list-style: none;
-    padding: 0;
-    color: black;
-  }
-  
-  #productos{
-    width: 100%;
-    margin: 10px 0;
-    padding: 10px;
-    background-color: black;
-    box-shadow: 0 2px 4px black;
-    color: #28a745;
-  }
+h1 {
+  text-align: center;
+  color: black;
+}
 
-    #carrito {
-    width: 100%;
-    margin: 10px 0;
-    padding: 10px;
-    background-color: black;
-    box-shadow: 0 2px 4px black;
-  }
-  
-  #productos li, #carrito li {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 10px;
-    padding: 10px;
-    background-color: rgb(22, 215, 22);
-    box-shadow: 0 2px 4px #28a745;
-  }
-  
-  .product-info {
-    display: flex;
-    align-items: center;
-  }
-  
-  .product-info span {
-    margin-right: 10px;
-  }
-  
-  .discount {
-    color: black;
-    font-weight: bold;
-  }
-  
-  .delete-button {
-    background-color: transparent;
-    border: none;
-    color: black;
-    font-size: 18px;
-    cursor: pointer;
-    margin-left: 10px;
-  }
-  
-  .delete-button:hover {
-    color: black;
-  }
-  
-  #total {
-    font-weight: bold;
-    text-align: right;
-    margin-right: 10px;
-    margin-top: 10px;
-  }
-  
-  .notification {
-    position: fixed;
-    top: 10px;
-    right: 10px;
-    background-color: #28a745;
-    color: black;
-    padding: 10px;
-    border-radius: 5px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    z-index: 9999;
-  }
-  
-  #comprarBtn {
-    background-color: #28a745;
-    color: black;
-    border: none;
-    padding: 10px 20px;
-    font-size: 16px;
-    cursor: pointer;
-    display: block;
-    margin: 10px auto;
-  }
-  
-  #comprarBtn:hover {
-    background-color: white;
-  }
-  
-  /* Estilos para la capa de superposición */
-  .detalleCompra {
-    display: none; 
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.7); 
-    z-index: 1; 
-  }
-  
-  /* Estilos para el contenido de la capa de superposición */
-  .detalleCompra-content {
-    background-color: #28a745;
-    border: 1px solid black;
-    border-radius: 5px;
-    position: absolute;
-    display: flex;
-    flex-direction: column;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    padding: 20px;
-    width: 80%;
-    max-width: 400px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-  }
-  
-  #totalCompra {
-    font-weight: bold;
-    text-align: right;
-    margin-right: 10px;
-    margin-top: 10px;
-    margin-bottom: 10px; 
-    border-top: 1px solid black; 
-    padding-top: 10px; 
-    box-shadow: 0 -1px 1px rgba(0, 0, 0, 0.1);
-  }
-  
-  #graciasPorCompra {
-    text-align: center;
-    margin-top: 30px;
-    margin-bottom: 10px;
-  }
-  
-  #listadoProductosComprados {
-    margin-top: 10px;
-    margin-bottom: 10px;
-  }
-  
-  /* Estilos para el botón de cerrar */
-  .cerrarDetalleCompra {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    cursor: pointer;
-    font-size: 24px;
-    color:black;
-  }
-  
-  
-  
+header {
+  background-color: rgb(46, 211, 46);
+  color: rgb(46, 211, 46);
+  padding: 0;
+  border: none;
+  margin: 0;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 999;
+}
+
+nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 10px 20px;
+  border: none;
+}
+
+.logo img {
+  max-height: 50px;
+}
+
+.icons img {
+  max-height: 30px;
+  margin-left: 20px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  cursor: pointer;
+}
+
+
+
+/*AGREGANDO ESTILOS EN LOS PRODUCTOS */
+.product-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  max-width: 1200px;
+  margin: 60px auto 20px;
+  padding: 0 20px;
+  margin-top: 9%;
+  color: rgb(46, 211, 46);
+  ;
+}
+
+/* Establecer el espacio entre los productos*/
+.product {
+  border: 1px solid rgb(46, 211, 46);
+  padding: 10px;
+  margin: 10px;
+  text-align: center;
+  width: calc(33.33% - 20px);
+  box-sizing: border-box;
+}
+
+/* ESTABLECIENDO ALTURA */
+.product img {
+  max-width: 100%;
+  height: 60%;
+  object-fit: cover;
+}
+
+/* AÑADIENDO MARGENES */
+.product:nth-child(3n + 1) {
+  margin-left: 0;
+}
+
+.product:nth-child(3n) {
+  margin-right: 0;
+}
+
+.counter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 10px 0;
+}
+
+.counter button {
+  background-color: rgb(46, 211, 46);
+  color: black;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.quantity {
+  margin: 0 10px;
+  color: rgb(46, 211, 46);
+}
+
+.buy-button {
+  background-color: rgb(46, 211, 46);
+  color: black;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+}
+
+.discounted {
+  text-decoration: line-through;
+  color: #888;
+}
+
+/* ESTILOS PARA AL CARRITO */
+.cart-sidebar {
+  position: fixed;
+  top: 60px;
+  right: -300px;
+  width: 300px;
+  height: 100%;
+  background-color: rgb(46, 211, 46);
+  box-shadow: -5px 0 10px black;
+  padding: 20px;
+  overflow-y: auto;
+  transition: right 0.3s ease-in-out;
+  z-index: 998;
+  color: black;
+}
+
+.cart-sidebar.open {
+  right: 0;
+}
+
+/* ESTILOS AL BOTON DEL CARRITO */
+.close-cart-button {
+  position: absolute;
+  top: 6%;
+  right: 10px;
+  background-color: black;
+  color: black;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+/* ESTILOS A LOS ELEMENTOS */
+.cart-items {
+  list-style: none;
+  padding: 0;
+}
+
+.cart-items li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.cart-items img {
+  max-width: 30px;
+  max-height: 30px;
+}
+
+.checkout-button {
+  background-color: black;
+  color: green;
+  border: none;
+  padding: 10px;
+  width: 100%;
+  cursor: pointer;
+}
+
+.product .remove-button {
+  display: none;
+}
+
+/* ESTILO PARA BORRAR LOS PRODUCTOS EN EL CARRITO  */
+.remove-button {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+
+.remove-button img {
+  width: 20px;
+  height: auto;
+}

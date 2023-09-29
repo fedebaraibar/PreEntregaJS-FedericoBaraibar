@@ -1,0 +1,47 @@
+[
+    {
+        "id": 1,
+        "nombre": "Teclado Gamer",
+        "imagen": "./multimedia/teclado.jpeg",
+        "precio": 8000,
+        "tieneDescuento": true,
+        "precioDescuento": 6800
+    },
+    {
+        "id": 2,
+        "nombre": "Mouse Gamer Rgb",
+        "imagen": "./multimedia/mouse.jpg",
+        "precio": 3000,
+        "tieneDescuento": true,
+        "precioDescuento": 2550
+    },
+    {
+        "id": 3,
+        "nombre": "Monitor Full HD",
+        "imagen": "./multimedia/monitor.jpg",
+        "precio": 10000,
+        "tieneDescuento": false
+    },
+    {
+        "id": 4,
+        "nombre": "Placa de Video RTX4080",
+        "imagen": "./multimedia/placa de video.jpg",
+        "precio": 14000,
+        "tieneDescuento": true,
+        "precioDescuento": 11900
+    },
+    {
+        "id": 5,
+        "nombre": "Gabinete Gamer RGB",
+        "imagen": "./multimedia/gabinete.png",
+        "precio": 5000,
+        "tieneDescuento": false
+    },
+    {
+        "id": 6,
+        "nombre": "Webcam para Streamear",
+        "imagen": "./multimedia/webcam.png",
+        "precio": 3500,
+        "tieneDescuento": false
+    }
+]
